@@ -1,13 +1,30 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import {
+  ArrowDownRight,
+  ArrowLeft,
+  ArrowUpRight,
+  BrainCircuit,
+  CalendarDays,
+  CheckCircle2,
+  CircleHelp,
+  Flame,
+  Layers3,
+  Lightbulb,
+  RefreshCw,
+  ScanSearch,
+  SearchX,
+  Sparkles,
+  Target,
+} from 'lucide-react';
 
 const TABS = [
-  { id: 'exact',       icon: '🎯', label: 'Exact Matches' },
-  { id: 'semantic',    icon: '🔗', label: 'Similar Questions' },
-  { id: 'frequency',   icon: '📊', label: 'Topic Heatmap' },
-  { id: 'evolution',   icon: '🔄', label: 'Patterns' },
-  { id: 'recommend',   icon: '💡', label: 'Recommendations' },
-  { id: 'predicted',   icon: '🔮', label: 'Predictions' },
+  { id: 'exact',       icon: Target,       label: 'Exact Matches' },
+  { id: 'semantic',    icon: ScanSearch,   label: 'Similar Questions' },
+  { id: 'frequency',   icon: Layers3,      label: 'Topic Heatmap' },
+  { id: 'evolution',   icon: RefreshCw,    label: 'Patterns' },
+  { id: 'recommend',   icon: Lightbulb,    label: 'Recommendations' },
+  { id: 'predicted',   icon: BrainCircuit, label: 'Predictions' },
 ];
 
 export default function ResultsPage({ data, onReset }) {
@@ -18,7 +35,7 @@ export default function ResultsPage({ data, onReset }) {
   const years = data.years_analyzed ?? [];
 
   return (
-    <main className="page">
+    <main className="page results-page">
       <div className="results-container">
 
         {/* Header */}
@@ -28,26 +45,29 @@ export default function ResultsPage({ data, onReset }) {
           animate={{ opacity: 1, y: 0 }}
         >
           <h1>
-            <span className="gradient-text">{data.subject}</span> — Analysis
+            <span className="gradient-text">{data.subject}</span> Analysis
           </h1>
           <div className="results-meta">
-            <span className="meta-pill">📅 Years: {years.join(', ')}</span>
-            <span className="meta-pill">❓ {data.total_questions_analyzed} questions analyzed</span>
-            <span className="meta-pill">🎯 {(data.exact_matches ?? []).length} exact matches found</span>
+            <span className="meta-pill"><CalendarDays size={15} /> Years: {years.join(', ')}</span>
+            <span className="meta-pill"><CircleHelp size={15} /> {data.total_questions_analyzed} questions analyzed</span>
+            <span className="meta-pill"><Target size={15} /> {(data.exact_matches ?? []).length} exact matches found</span>
           </div>
         </motion.div>
 
         {/* Tabs */}
         <div className="tabs">
-          {TABS.map(tab => (
-            <button
-              key={tab.id}
-              className={`tab-btn${activeTab === tab.id ? ' active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.icon} {tab.label}
-            </button>
-          ))}
+          {TABS.map(tab => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                className={`tab-btn${activeTab === tab.id ? ' active' : ''}`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                <Icon size={16} /> {tab.label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Tab Content */}
@@ -69,9 +89,9 @@ export default function ResultsPage({ data, onReset }) {
         </AnimatePresence>
 
         {/* Footer CTA */}
-        <div style={{ textAlign: 'center', marginTop: 48 }}>
-          <button className="btn-primary" onClick={onReset} style={{ opacity: 0.75 }}>
-            ← Analyze Another Subject
+        <div className="results-footer">
+          <button className="btn-secondary" onClick={onReset}>
+            <ArrowLeft size={17} /> Analyze Another Subject
           </button>
         </div>
       </div>
@@ -86,7 +106,7 @@ function ExactTab({ data }) {
 
   return (
     <>
-      <h2 className="section-title">🎯 Questions That Appeared Verbatim in Multiple Years</h2>
+      <h2 className="section-title"><Target size={20} /> Questions That Appeared Verbatim in Multiple Years</h2>
       {items.map((q, i) => (
         <motion.div
           key={i}
@@ -100,7 +120,7 @@ function ExactTab({ data }) {
             {(q.years ?? []).map(y => (
               <span key={y} className="badge badge-cyan">{y}</span>
             ))}
-            <span className="freq-badge">🔁 {q.frequency}× repeated</span>
+            <span className="freq-badge"><RefreshCw size={13} /> {q.frequency}x repeated</span>
           </div>
         </motion.div>
       ))}
@@ -115,7 +135,7 @@ function SemanticTab({ data }) {
 
   return (
     <>
-      <h2 className="section-title">🔗 Same Topic, Different Wording</h2>
+      <h2 className="section-title"><ScanSearch size={20} /> Same Topic, Different Wording</h2>
       {items.map((s, i) => (
         <motion.div
           key={i}
@@ -124,9 +144,9 @@ function SemanticTab({ data }) {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: i * 0.06 }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-            <span style={{ fontWeight: 700, fontSize: 15 }}>{s.pattern}</span>
-            <span className="score-chip">⚡ {(s.similarity_score * 100).toFixed(0)}% similar</span>
+          <div className="semantic-heading">
+            <span>{s.pattern}</span>
+            <span className="score-chip"><Sparkles size={12} /> {(s.similarity_score * 100).toFixed(0)}% similar</span>
           </div>
           <div className="variation-block">
             {Object.entries(s.variations ?? {}).map(([year, text]) => (
@@ -151,8 +171,8 @@ function FrequencyTab({ data, years }) {
 
   return (
     <>
-      <h2 className="section-title">📊 Topic Frequency Across Years</h2>
-      <div className="glass" style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
+      <h2 className="section-title"><Layers3 size={20} /> Topic Frequency Across Years</h2>
+      <div className="table-shell">
         <table className="freq-table">
           <thead>
             <tr>
@@ -192,30 +212,33 @@ function EvolutionTab({ data }) {
   const ev = data.evolution_patterns ?? {};
 
   const cards = [
-    { key: 'trending',   className: 'trending',   icon: '📈', title: 'Trending Up',    items: ev.trending   ?? [] },
-    { key: 'declining',  className: 'declining',  icon: '📉', title: 'Declining',       items: ev.declining  ?? [] },
-    { key: 'new_topics', className: 'new-topic',  icon: '🆕', title: 'New This Year',   items: ev.new_topics ?? [] },
-    { key: 'consistent', className: 'consistent', icon: '✅', title: 'Always Present',  items: ev.consistent ?? [] },
+    { key: 'trending',   className: 'trending',   icon: ArrowUpRight,   title: 'Trending Up',    items: ev.trending   ?? [] },
+    { key: 'declining',  className: 'declining',  icon: ArrowDownRight, title: 'Declining',      items: ev.declining  ?? [] },
+    { key: 'new_topics', className: 'new-topic',  icon: Flame,          title: 'New This Year',  items: ev.new_topics ?? [] },
+    { key: 'consistent', className: 'consistent', icon: CheckCircle2,   title: 'Always Present', items: ev.consistent ?? [] },
   ];
 
   return (
     <>
-      <h2 className="section-title">🔄 How Topics Have Evolved Over the Years</h2>
+      <h2 className="section-title"><RefreshCw size={20} /> How Topics Have Evolved Over the Years</h2>
       <div className="patterns-grid">
-        {cards.map((c, i) => (
-          <motion.div
-            key={c.key}
-            className={`pattern-card glass ${c.className}`}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.07 }}
-          >
-            <h4>{c.icon} {c.title}</h4>
-            {c.items.length
-              ? c.items.map((item, j) => <div key={j} className="pattern-item">{item}</div>)
-              : <div className="pattern-item" style={{ fontStyle: 'italic' }}>None detected</div>}
-          </motion.div>
-        ))}
+        {cards.map((c, i) => {
+          const Icon = c.icon;
+          return (
+            <motion.div
+              key={c.key}
+              className={`pattern-card ${c.className}`}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.07 }}
+            >
+              <h4><Icon size={17} /> {c.title}</h4>
+              {c.items.length
+                ? c.items.map((item, j) => <div key={j} className="pattern-item">{item}</div>)
+                : <div className="pattern-item" style={{ fontStyle: 'italic' }}>None detected</div>}
+            </motion.div>
+          );
+        })}
       </div>
     </>
   );
@@ -228,11 +251,11 @@ function RecommendTab({ data }) {
 
   return (
     <>
-      <h2 className="section-title">💡 Your Personalized Study Recommendations</h2>
+      <h2 className="section-title"><Lightbulb size={20} /> Your Personalized Study Recommendations</h2>
       {recs.map((r, i) => (
         <motion.div
           key={i}
-          className="recommendation-card glass"
+          className="recommendation-card"
           initial={{ opacity: 0, x: -8 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: i * 0.06 }}
@@ -252,14 +275,14 @@ function PredictedTab({ data }) {
 
   return (
     <>
-      <h2 className="section-title">🔮 Most Likely Questions for Your Next Exam</h2>
-      <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 20 }}>
+      <h2 className="section-title"><BrainCircuit size={20} /> Most Likely Questions for Your Next Exam</h2>
+      <p className="section-subtitle">
         Based on frequency trends and topic evolution patterns across all analyzed papers.
       </p>
       {preds.map((q, i) => (
         <motion.div
           key={i}
-          className="predicted-card glass"
+          className="predicted-card"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.07 }}
@@ -275,8 +298,8 @@ function PredictedTab({ data }) {
 /* ─── Empty State ─── */
 function Empty({ msg }) {
   return (
-    <div className="empty-state glass" style={{ borderRadius: 'var(--radius-lg)', padding: 56 }}>
-      <div style={{ fontSize: 40, marginBottom: 14 }}>🌙</div>
+    <div className="empty-state">
+      <SearchX size={40} />
       <p>{msg}</p>
     </div>
   );
