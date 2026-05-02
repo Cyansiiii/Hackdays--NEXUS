@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-2.0-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 ANALYSIS_PROMPT = """
 You are Quin, an expert question paper analyzer for university and board exams.
