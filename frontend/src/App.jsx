@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Lenis from 'lenis';
 import './index.css';
 import Navbar from './components/Navbar';
 import UploadPage from './pages/UploadPage';
@@ -12,6 +13,28 @@ export default function App() {
   const [phase, setPhase] = useState('hero'); // 'hero' | 'upload' | 'loading' | 'results'
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
+  const lenisRef = useRef(null);
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      autoRaf: true,
+      anchors: true,
+      lerp: 0.08,
+      duration: 1.1,
+      smoothWheel: true,
+    });
+
+    lenisRef.current = lenis;
+
+    return () => {
+      lenis.destroy();
+      lenisRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    lenisRef.current?.resize();
+  }, [phase]);
 
   const handleAnalyze = async ({ subject, files }) => {
     setPhase('loading');
