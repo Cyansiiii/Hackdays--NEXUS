@@ -11,7 +11,7 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 ANALYSIS_PROMPT = """
-You are Quin, an expert question paper analyzer for university and board exams.
+You are NEXUS, an expert question paper analyzer for university and board exams.
 
 Analyze ALL the uploaded question paper PDFs for the subject: {subject}
 Years provided: {years}

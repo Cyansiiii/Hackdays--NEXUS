@@ -7,7 +7,7 @@ from gemini import analyze_papers
 
 load_dotenv()
 
-app = FastAPI(title="Quin v2 — Question Paper Analyzer")
+app = FastAPI(title="NEXUS — Question Paper Analyzer")
 
 app.add_middleware(
     CORSMiddleware,

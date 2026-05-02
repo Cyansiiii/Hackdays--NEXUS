@@ -4,11 +4,12 @@ import Navbar from './components/Navbar';
 import UploadPage from './pages/UploadPage';
 import LoadingPage from './pages/LoadingPage';
 import ResultsPage from './pages/ResultsPage';
+import HeroPage from './pages/HeroPage';
 
 const API_BASE = 'http://localhost:8000';
 
 export default function App() {
-  const [phase, setPhase] = useState('upload'); // 'upload' | 'loading' | 'results'
+  const [phase, setPhase] = useState('hero'); // 'hero' | 'upload' | 'loading' | 'results'
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
 
@@ -47,6 +48,10 @@ export default function App() {
     setResults(null);
     setError(null);
   };
+
+  if (phase === 'hero') {
+    return <HeroPage onDashboardClick={() => setPhase('upload')} />;
+  }
 
   return (
     <>

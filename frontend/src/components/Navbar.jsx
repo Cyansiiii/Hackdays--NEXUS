@@ -3,8 +3,7 @@ export default function Navbar({ onReset, showReset }) {
     <nav className="navbar">
       <div className="navbar-logo">
         <div className="logo-icon">✦</div>
-        <span className="gradient-text">Quin</span>
-        <span style={{ color: 'var(--text-muted)', fontWeight: 400, fontSize: 13 }}>v2</span>
+        <span className="gradient-text">NEXUS</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Powered by Gemini 1.5 Flash</span>

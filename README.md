@@ -2,7 +2,7 @@
 
 > **MLH Hackathon Project** · Built with Gemini 2.0 Flash + FastAPI + React
 
-NEXUS (also called **Quin v2**) is a full-stack AI tool that analyzes previous year question papers (PYQs) and returns:
+NEXUS (formerly **Quin v2**) is a full-stack AI tool that analyzes previous year question papers (PYQs) and returns:
 
 - 🎯 **Exact matches** — questions repeated verbatim across years
 - 🔗 **Semantic matches** — same topic, different wording
